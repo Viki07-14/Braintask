@@ -7,7 +7,7 @@ pipeline {
         IMAGE_REPO     = 'brain-task-app'
         IMAGE_TAG      = "${BUILD_NUMBER}"   // or 'latest'
         ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        KUBECONFIG   = "/var/lib/jenkins/.kube/config"
+        KUBECONFIG     = "/var/lib/jenkins/.kube/config"
     }
 
     stages {
@@ -36,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                  docker build --no-cache -t $IMAGE_REPO:$IMAGE_TAG .
+                  docker build --no-cache -t $IMAGE_REPO:latest .
                 '''
             }
         }
@@ -44,8 +44,7 @@ pipeline {
         stage('Tag Docker Image') {
             steps {
                 sh '''
-                  docker tag $IMAGE_REPO:$IMAGE_TAG \
-                  $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
+                  docker tag $IMAGE_REPO:latest $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
                 '''
             }
         }
