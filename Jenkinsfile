@@ -36,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                  docker build --no-cache -t $IMAGE_REPO:$IMAGE_TAG .
+                  docker build --no-cache -t $IMAGE_REPO:latest . | tee -a /var/lib/jenkins/workspace/${JOB_NAME}/console.log
                 '''
             }
         }
@@ -44,8 +44,7 @@ pipeline {
         stage('Tag Docker Image') {
             steps {
                 sh '''
-                  docker tag $IMAGE_REPO:$IMAGE_TAG \
-                  $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
+                  docker tag $IMAGE_REPO:latest $ECR_REGISTRY/$IMAGE_REPO:$IMAGE_TAG
                 '''
             }
         }
@@ -77,3 +76,4 @@ pipeline {
         }
     }
 }
+
