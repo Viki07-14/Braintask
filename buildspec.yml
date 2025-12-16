@@ -3,14 +3,18 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Hello pre_build"
+      - echo "🚀 Starting pre-build phase: Logging in to AWS ECR..."
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 213375652280.dkr.ecr.ap-south-1.amazonaws.com
+
   build:
     commands:
-      - echo "Hello build"
+      - echo "🛠 Starting build phase: Building Docker image 'brain-task-app:latest'..."
       - docker build -t brain-task-app:latest .
+      - echo "🏷 Tagging image for ECR as 'brain-task-app:1'..."
       - docker tag brain-task-app:latest 213375652280.dkr.ecr.ap-south-1.amazonaws.com/brain-task-app:1
+
   post_build:
     commands:
-      - echo "Hello post_build"
+      - echo "📤 Starting post-build phase: Pushing Docker image to ECR..."
       - docker push 213375652280.dkr.ecr.ap-south-1.amazonaws.com/brain-task-app:1
+      - echo "✅ Docker image pushed successfully to 213375652280.dkr.ecr.ap-south-1.amazonaws.com/brain-task-app:1"
