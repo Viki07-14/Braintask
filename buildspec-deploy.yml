@@ -8,15 +8,14 @@ env:
 phases:
   install:
     commands:
+      - echo "Checking AWS CLI..."
+      - aws --version
       - echo "Installing kubectl..."
       - curl -LO https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
       - chmod +x kubectl
       - mv kubectl /usr/local/bin/
+      - kubectl version --client
   pre_build:
     commands:
-      - echo "Configuring kubectl..."
-      - bash scripts/configure-eks.sh
-  build:
-    commands:
-      - echo "Deploying to EKS..."
-      - bash scripts/deploy.sh
+      - echo "Updating kubeconfig for EKS..."
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-task-cluster
