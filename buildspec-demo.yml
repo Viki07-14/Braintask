@@ -1,0 +1,20 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Installing kubectl..."
+      - curl -LO https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/kubectl
+      - kubectl version --client
+  pre_build:
+    commands:
+      - echo "Updating kubeconfig..."
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-task-cluster
+  build:
+    commands:
+      - echo "Debug info:"
+      - whoami
+      - env
+      - echo "Testing kubectl access to nodes..."
+      - kubectl get nodes --v=8
